@@ -1,4 +1,6 @@
-﻿## **Файл: /Users/katedem/PycharmProjects/shop-passag/manage.py**
+# Исходный текст программы
+
+## **Файл:  manage.py**
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
 import os
@@ -21,7 +23,7 @@ def main():
 
 if \_\_name\_\_ == '\_\_main\_\_':
 `    `main()
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/script.py**
+## **Файл:  script.py**
 import os
 from docx import Document
 
@@ -73,7 +75,7 @@ exclude\_dirs = ["media", "venv", "static", "\_\_pycache\_\_", "migrations", "ap
 output\_file = "output.docx"
 
 create\_doc\_from\_folder(folder\_path, output\_file, exclude\_dirs)
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/carts/models.py**
+## **Файл:  carts/models.py**
 from django.db import models
 from goods.models import Products, SizeProductRelation
 
@@ -114,9 +116,9 @@ class Cart(models.Model):
 `            `return f'Корзина {self.user.username} | Товар {self.sizeproduct.product.name} | Количество {self.quantity}'
 
 `        `return f'Анонимная корзина | Товар {self.sizeproduct.product.name} | Количество {self.quantity}'
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/carts/\_\_init\_\_.py**
+## **Файл:  carts/\_\_init\_\_.py**
 
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/carts/apps.py**
+## **Файл:  carts/apps.py**
 from django.apps import AppConfig
 
 
@@ -124,7 +126,7 @@ class CartsConfig(AppConfig):
 `    `default\_auto\_field = 'django.db.models.BigAutoField'
 `    `name = 'carts'
 `    `verbose\_name = 'Корзины'
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/carts/admin.py**
+## **Файл:  carts/admin.py**
 from django.contrib import admin
 
 from carts.models import Cart
@@ -151,7 +153,7 @@ class CartAdmin(admin.ModelAdmin):
 
 `    `def sizeproduct\_display(self, obj):
 `        `return str(obj.sizeproduct.product.name)
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/carts/utils.py**
+## **Файл:  carts/utils.py**
 from carts.models import Cart
 
 
@@ -162,11 +164,11 @@ def get\_user\_carts(request):
 `    `if not request.session.session\_key:
 `        `request.session.create()
 `    `return Cart.objects.filter(session\_key=request.session.session\_key)
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/carts/tests.py**
+## **Файл:  carts/tests.py**
 from django.test import TestCase
 
 \# Create your tests here.
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/carts/urls.py**
+## **Файл:  carts/urls.py**
 from django.urls import path
 
 from carts import views
@@ -178,7 +180,7 @@ urlpatterns = [
 `    `path('cart\_change/', views.cart\_change, name='cart\_change'),
 `    `path('cart\_remove/', views.cart\_remove, name='cart\_remove'),
 ]
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/carts/views.py**
+## **Файл:  carts/views.py**
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render\_to\_string
@@ -298,7 +300,7 @@ def cart\_remove(request):
 `    `}
 
 `    `return JsonResponse(response\_data)
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/carts/templatetags/carts\_tags.py**
+## **Файл:  carts/templatetags/carts\_tags.py**
 from django import template
 
 from carts.models import Cart
@@ -310,9 +312,9 @@ register = template.Library()
 @register.simple\_tag()
 def user\_carts(request):
 `    `return get\_user\_carts(request)
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/carts/templatetags/\_\_init\_\_.py**
+## **Файл:  carts/templatetags/\_\_init\_\_.py**
 
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/carts/templates/carts/includes/included\_cart.html**
+## **Файл:  carts/templates/carts/includes/included\_cart.html**
 {% load static %}
 
 <div class="mb-3">
@@ -372,7 +374,7 @@ def user\_carts(request):
 `        `</div>
 `    `</div>
 {% endif %}
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/users/models.py**
+## **Файл:  users/models.py**
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -387,9 +389,9 @@ class User(AbstractUser):
 
 `    `def \_\_str\_\_(self):
 `        `return self.username
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/users/\_\_init\_\_.py**
+## **Файл:  users/\_\_init\_\_.py**
 
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/users/apps.py**
+## **Файл:  users/apps.py**
 from django.apps import AppConfig
 
 
@@ -397,7 +399,7 @@ class UsersConfig(AppConfig):
 `    `default\_auto\_field = 'django.db.models.BigAutoField'
 `    `name = 'users'
 `    `verbose\_name = 'Пользователи'
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/users/forms.py**
+## **Файл:  users/forms.py**
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm, PasswordResetForm, PasswordChangeForm
 
@@ -466,7 +468,7 @@ class CustomPasswordChangeForm(PasswordChangeForm):
 `                                    `widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 `    `new\_password2 = forms.CharField(label='Подтверждение нового пароля',
 `                                    `widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/users/admin.py**
+## **Файл:  users/admin.py**
 from django.contrib import admin
 from carts.admin import CartTabAdmin
 from orders.admin import OrderTabulareAdmin
@@ -479,11 +481,11 @@ class UserAdmin(admin.ModelAdmin):
 `    `search\_fields = ["username", "first\_name", "last\_name", "email", "phone\_number"]
 
 `    `inlines = [CartTabAdmin,OrderTabulareAdmin]
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/users/tests.py**
+## **Файл:  users/tests.py**
 from django.test import TestCase
 
 \# Create your tests here.
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/users/urls.py**
+## **Файл:  users/urls.py**
 from django.urls import path
 from users import views
 
@@ -498,7 +500,7 @@ urlpatterns = [
 `    `path('orders', views.profile, name='orders'),
 
 ]
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/users/views.py**
+## **Файл:  users/views.py**
 from django.contrib.auth.decorators import login\_required
 from django.contrib import auth, messages
 from django.db.models import Prefetch
@@ -689,7 +691,7 @@ def logout(request):
 `    `messages.success(request, f"{request.user.username}, Вы вышли из аккаунта")
 `    `auth.logout(request)
 `    `return redirect(reverse('main:index'))
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/users/templates/users/profile.html**
+## **Файл:  users/templates/users/profile.html**
 {% extends "base.html" %}
 {% load static %}
 {% load carts\_tags %}
@@ -896,7 +898,7 @@ def logout(request):
 </script>
 
 {% endblock %}
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/users/templates/users/forgot\_password.html**
+## **Файл:  users/templates/users/forgot\_password.html**
 {% extends "base.html" %}
 {% load static %}
 
@@ -959,7 +961,7 @@ def logout(request):
 `    `});
 </script>
 {% endblock %}
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/users/templates/users/users\_cart.html**
+## **Файл:  users/templates/users/users\_cart.html**
 {% extends "base.html" %}
 {% load static %}
 {% load carts\_tags %}
@@ -982,7 +984,7 @@ def logout(request):
 `    `</div>
 </div>
 {% endblock  %}
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/users/templates/users/login.html**
+## **Файл:  users/templates/users/login.html**
 {% extends "base.html" %}
 {% load static %}
 
@@ -1031,7 +1033,7 @@ def logout(request):
 `    `<div style="height: 200px"></div>
 </div>
 {% endblock  %}
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/users/templates/users/registration.html**
+## **Файл:  users/templates/users/registration.html**
 {% extends "base.html" %}
 {% load static %}
 
@@ -1143,7 +1145,7 @@ def logout(request):
 `    `</div>
 </div>
 {% endblock  %}
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/templates/base.html**
+## **Файл:  templates/base.html**
 {% load static %}
 {% load goods\_tags %}
 
@@ -1370,7 +1372,7 @@ def logout(request):
 </body>
 
 </html>
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/templates/includes/notifications.html**
+## **Файл:  templates/includes/notifications.html**
 {% load static %}
 
 {% if form.non\_field\_errors %}
@@ -1409,7 +1411,7 @@ def logout(request):
 `        `</div>
 `    `</div>
 </div>
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/templates/includes/cart\_button.html**
+## **Файл:  templates/includes/cart\_button.html**
 {% load static %}
 {% load carts\_tags %}
 
@@ -1449,7 +1451,7 @@ def logout(request):
 `        `</div>
 `    `</div>
 </div>
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/fixtures/goods/cats.json**
+## **Файл:  fixtures/goods/cats.json**
 [
 `  `{
 `    `"model": "goods.categories",
@@ -1508,9 +1510,9 @@ def logout(request):
 `    `}
 `  `}
 ]
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/fixtures/goods/prod.json**
+## **Файл:  fixtures/goods/prod.json**
 [{"model": "goods.products", "pk": 1, "fields": {"name": "Чайный столик и три стула", "slug": "chajnyj-stolik-i-tri-stula", "description": "Комплект из трёх стульев и дизайнерский столик для гостинной комнаты.", "image": "goods\_images/set\_of\_tea\_table\_and\_three\_chairs.jpg", "price": "150.00", "discount": "10.00", "quantity": 10, "category": 5}}, {"model": "goods.products", "pk": 2, "fields": {"name": "Чайный столик и два стула", "slug": "chajnyj-stolik-i-dva-stula", "description": "Набор из стола и двух стульев в минималистическом стиле.", "image": "goods\_images/set\_of\_tea\_table\_and\_two\_chairs.jpg", "price": "93.00", "discount": "2.50", "quantity": 5, "category": 5}}, {"model": "goods.products", "pk": 3, "fields": {"name": "Двухспальная кровать", "slug": "dvuhspalnaya-krovat", "description": "Кровать двухспальная с надголовником и вообще очень ортопедичная.", "image": "goods\_images/double\_bed.jpg", "price": "670.00", "discount": "0.00", "quantity": 7, "category": 6}}, {"model": "goods.products", "pk": 4, "fields": {"name": "Кухонный стол с раковиной", "slug": "kuhonnyj-stol-s-rakovinoj", "description": "Кухонный стол для обеда с встроенной раковиной и стульями.", "image": "goods\_images/kitchen\_table\_PFsm2Fr.jpg", "price": "365.00", "discount": "0.00", "quantity": 12, "category": 5}}, {"model": "goods.products", "pk": 5, "fields": {"name": "Кухонный стол с встройкой", "slug": "kuhonnyj-stol-s-vstrojkoj", "description": "Кухонный стол со встроенной плитой и раковиной. Много полок и вообще красивый.", "image": "goods\_images/kitchen\_table\_2\_C6dHEMj.jpg", "price": "430.00", "discount": "4.99", "quantity": 9, "category": 5}}, {"model": "goods.products", "pk": 6, "fields": {"name": "Угловой диван для гостинной", "slug": "uglovoj-divan-dlya-gostinnoj", "description": "Угловой диван, раскладывается в двухспальную кровать, для гостинной и приема гостей самое то!", "image": "goods\_images/corner\_sofa.jpg", "price": "610.00", "discount": "2.00", "quantity": 8, "category": 8}}, {"model": "goods.products", "pk": 7, "fields": {"name": "Прикроватный столик", "slug": "prikrovatnyj-stolik", "description": "Прикроватный столик с двумя выдвижными ящиками (цветок не входит в комплект).", "image": "goods\_images/bedside\_table.jpg", "price": "55.00", "discount": "0.00", "quantity": 5, "category": 6}}, {"model": "goods.products", "pk": 8, "fields": {"name": "Диван обыкновенный", "slug": "divan-obyknovennyj", "description": "Диван, он же софа обыкновенная, ничего примечательного для описания.", "image": "goods\_images/sofa.jpg", "price": "190.00", "discount": "4.99", "quantity": 7, "category": 8}}, {"model": "goods.products", "pk": 9, "fields": {"name": "Стул офисный", "slug": "stul-ofisnyj", "description": "Описание товара, про то какой он классный, но это стул, что тут сказать...", "image": "goods\_images/office\_chair.jpg", "price": "30.00", "discount": "0.50", "quantity": 40, "category": 9}}, {"model": "goods.products", "pk": 10, "fields": {"name": "Растение", "slug": "rastenie", "description": "Растение для украшения вашего интерьера подарит свежесть и безмятежность обстановке.", "image": "goods\_images/plants.jpg", "price": "10.00", "discount": "0.00", "quantity": 17, "category": 7}}, {"model": "goods.products", "pk": 11, "fields": {"name": "Цветок стилизированный", "slug": "cvetok-stilizirovannyj", "description": "Дизайнерский цветок (возможно искусственный) для украшения интерьера.", "image": "goods\_images/flower.jpg", "price": "15.00", "discount": "0.00", "quantity": 17, "category": 7}}, {"model": "goods.products", "pk": 12, "fields": {"name": "Прикроватный столик 2", "slug": "prikrovatnyj-stolik-2", "description": "Столик, довольно странный на вид, но подходит для размещения рядом с кроватью.", "image": "goods\_images/strange\_table.jpg", "price": "25.00", "discount": "90.00", "quantity": 10, "category": 6}}]
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/goods/models.py**
+## **Файл:  goods/models.py**
 from django.db import models
 from django.urls import reverse
 \# from django.contrib.postgres.fields import CITextField
@@ -1661,9 +1663,9 @@ class SizeProductRelation(models.Model):
 
 `    `def \_\_str\_\_(self):
 `        `return f"{self.count} {self.size.name} {self.product.name}"
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/goods/\_\_init\_\_.py**
+## **Файл:  goods/\_\_init\_\_.py**
 
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/goods/apps.py**
+## **Файл:  goods/apps.py**
 from django.apps import AppConfig
 
 
@@ -1671,7 +1673,7 @@ class GoodsConfig(AppConfig):
 `    `default\_auto\_field = 'django.db.models.BigAutoField'
 `    `name = 'goods'
 `    `verbose\_name='Товары'
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/goods/admin.py**
+## **Файл:  goods/admin.py**
 from django.contrib import admin
 
 from goods.models import Categories, Products, Sizes, Color, Consist, SizeProductRelation, Country
@@ -1737,7 +1739,7 @@ class ProductsAdmin(admin.ModelAdmin):
 `        `"consist",
 `        `"country",
 `    `]
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/goods/utils.py**
+## **Файл:  goods/utils.py**
 \# from django.db.models import Q
 \#
 \# from goods.models import Products
@@ -1772,11 +1774,11 @@ def q\_search(query):
 `    `q\_objects |= Q(name\_\_icontains=query)
 
 `    `return Products.objects.filter(q\_objects)
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/goods/tests.py**
+## **Файл:  goods/tests.py**
 from django.test import TestCase
 
 \# Create your tests here.
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/goods/urls.py**
+## **Файл:  goods/urls.py**
 from django.urls import path
 from goods import views
 
@@ -1786,7 +1788,7 @@ urlpatterns = [
 `    `path('<slug:category\_slug>/', views.catalog, name='index'),
 `    `path('product/<slug:product\_slug>/', views.product, name='product'),
 ]
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/goods/views.py**
+## **Файл:  goods/views.py**
 from django.core.paginator import Paginator
 from django.shortcuts import get\_list\_or\_404, get\_object\_or\_404, render
 
@@ -1875,9 +1877,9 @@ def product(request, product\_slug):
 `    `context = {"product": product}
 
 `    `return render(request, "goods/product.html", context=context)
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/goods/templatetags/\_\_init\_\_.py**
+## **Файл:  goods/templatetags/\_\_init\_\_.py**
 
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/goods/templatetags/goods\_tags.py**
+## **Файл:  goods/templatetags/goods\_tags.py**
 from django import template
 from django.utils.http import urlencode
 from django.db.models import Case, When, Value, IntegerField, Sum, Q
@@ -1916,7 +1918,7 @@ def change\_params(context, \*\*kwargs):
 @register.simple\_tag()
 def products(slug):
 `    `return Products.objects.filter(category\_\_slug=slug)
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/goods/templates/goods/product.html**
+## **Файл:  goods/templates/goods/product.html**
 {% extends "base.html" %}
 {% load static %}
 
@@ -1967,7 +1969,7 @@ def products(slug):
 `    `</div>
 </div>
 {% endblock  %}
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/goods/templates/goods/catalog.html**
+## **Файл:  goods/templates/goods/catalog.html**
 {% extends "base.html" %}
 {% load static %}
 {% load goods\_tags %}
@@ -2198,7 +2200,7 @@ def products(slug):
 `    `</nav>
 {% endif %}
 {% endblock  %}
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/orders/signals.py**
+## **Файл:  orders/signals.py**
 from django.db.models.signals import post\_save
 from django.dispatch import receiver
 from django.core.mail import send\_mail
@@ -2261,7 +2263,7 @@ def send\_email\_on\_field\_change(sender, instance, created, \*\*kwargs):
 `        `msg.attach(MIMEText(body, 'html'))
 
 `        `send(msg, instance.email)
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/orders/order.vue**
+## **Файл:  orders/order.vue**
 <template>
 `  `<div class="about-page mt-3">
 `    `<h2 class="m-2" style="color: #1d4d51; margin-bottom: 40px!important;"><strong>О нас</strong></h2>
@@ -2321,7 +2323,7 @@ export default {
 `  `margin-right: 0.25rem;
 }
 </style>
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/orders/models.py**
+## **Файл:  orders/models.py**
 from django.db import models
 from goods.models import Products, SizeProductRelation
 
@@ -2393,9 +2395,9 @@ class OrderItem(models.Model):
 
 `    `def \_\_str\_\_(self):
 `        `return f"Товар {self.name} | Заказ № {self.order.pk}"
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/orders/\_\_init\_\_.py**
+## **Файл:  orders/\_\_init\_\_.py**
 
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/orders/apps.py**
+## **Файл:  orders/apps.py**
 from django.apps import AppConfig
 
 
@@ -2406,7 +2408,7 @@ class OrdersConfig(AppConfig):
 
 `    `def ready(self):
 `        `import orders.signals
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/orders/forms.py**
+## **Файл:  orders/forms.py**
 import re
 from django import forms
 
@@ -2498,7 +2500,7 @@ class CreateOrderForm(forms.Form):
 `    `#     ],
 `    `#     initial="card",
 `    `# )
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/orders/admin.py**
+## **Файл:  orders/admin.py**
 from django.contrib import admin
 
 from orders.models import Order, OrderItem
@@ -2555,11 +2557,11 @@ class OrderAdmin(admin.ModelAdmin):
 `        `"status",
 `    `)
 `    `inlines = (OrderItemTabulareAdmin,)
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/orders/tests.py**
+## **Файл:  orders/tests.py**
 from django.test import TestCase
 
 \# Create your tests here.
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/orders/urls.py**
+## **Файл:  orders/urls.py**
 from django.urls import path
 
 from orders import views
@@ -2569,7 +2571,7 @@ app\_name = 'orders'
 urlpatterns = [
 `    `path('create-order/', views.create\_order, name='create\_order'),
 ]
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/orders/views.py**
+## **Файл:  orders/views.py**
 from django.contrib import messages
 from django.contrib.auth.decorators import login\_required
 from django.db import transaction
@@ -2645,7 +2647,7 @@ def create\_order(request):
 `        `'order': True,
 `    `}
 `    `return render(request, 'orders/create\_order.html', context=context)
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/orders/templates/orders/create\_order.html**
+## **Файл:  orders/templates/orders/create\_order.html**
 {% extends "base.html" %}
 {% load static %}
 {% load carts\_tags %}
@@ -2776,20 +2778,20 @@ def create\_order(request):
 {#        });#}
 {#    </script>#}
 {% endblock  %}
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/main/models.py**
+## **Файл:  main/models.py**
 from django.db import models
 
 \# Create your models here.
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/main/\_\_init\_\_.py**
+## **Файл:  main/\_\_init\_\_.py**
 
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/main/apps.py**
+## **Файл:  main/apps.py**
 from django.apps import AppConfig
 
 
 class MainConfig(AppConfig):
 `    `default\_auto\_field = 'django.db.models.BigAutoField'
 `    `name = 'main'
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/main/forms.py**
+## **Файл:  main/forms.py**
 from django import forms
 from goods.models import Categories
 from django.db.models import Q, Sum
@@ -2800,15 +2802,15 @@ class ExportForm(forms.Form):
 `    `category = forms.ModelChoiceField(queryset=Categories.objects.annotate(product\_count=Sum('products\_\_sizeproductrelation\_\_count')).filter(Q(product\_count\_\_gt=0)), required=True)
 `    `start\_date = forms.DateField(label='Start Date', widget=forms.DateInput(attrs={'type': 'date'}), required=False)
 `    `end\_date = forms.DateField(label='End Date', widget=forms.DateInput(attrs={'type': 'date'}), required=False)
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/main/admin.py**
+## **Файл:  main/admin.py**
 from django.contrib import admin
 
 \# Register your models here.
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/main/tests.py**
+## **Файл:  main/tests.py**
 from django.test import TestCase
 
 \# Create your tests here.
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/main/urls.py**
+## **Файл:  main/urls.py**
 
 from django.urls import path
 from main import views
@@ -2819,7 +2821,7 @@ urlpatterns = [
 `    `path('about/', views.about, name='about'),
 `    `path('panel/', views.panel, name='panel'),
 ]
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/main/views.py**
+## **Файл:  main/views.py**
 from django.shortcuts import render
 from django.http import HttpResponse
 from goods.models import Products
@@ -2990,7 +2992,7 @@ def panel(request):
 `        `'form': form
 `    `}
 `    `return render(request, 'main/panel.html', context)
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/main/templates/main/index.html**
+## **Файл:  main/templates/main/index.html**
 {% extends "base.html" %}
 {% load static %}
 {% load goods\_tags %}
@@ -3024,7 +3026,7 @@ def panel(request):
 `      `</button>
 `    `</div>
 {% endblock %}
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/main/templates/main/about.html**
+## **Файл:  main/templates/main/about.html**
 {% extends "base.html" %}
 {% load static %}
 
@@ -3060,7 +3062,7 @@ def panel(request):
 `        `<iframe src="https://yandex.com/map-widget/v1/?um=constructor%3Aec8f4363eaa5434b6052a4e24b1f8aacc07b98c982486aa1e07b67ca74afc9e3&amp;source=constructor" width="400" height="300" style="margin-left: 250px"></iframe>
 `    `</div>
 {% endblock %}
-## **Файл: /Users/katedem/PycharmProjects/shop-passag/main/templates/main/panel.html**
+## **Файл:  main/templates/main/panel.html**
 {#{% extends "base.html" %}#}
 {#{% load static %}#}
 {##}
