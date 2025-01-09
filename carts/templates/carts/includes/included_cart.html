@@ -1,0 +1,59 @@
+{% load static %}
+
+<div class="mb-3">
+    {% for cart in carts %}
+        <ul class="list-group">
+            <li class="list-group-item" style="border-color: #ffffff">
+                <div class="row">
+                    <div class="col-2">
+                        <img src="{{ cart.sizeproduct.product.image.url }}" alt="..." height="90px" width="65px">
+                    </div>
+                    <div class="col-6" style="padding-left: 30px">
+                        <h5 class="card-title mb-1">{{ cart.sizeproduct.product.name }}</h5>
+                        <p style="margin-top:0; margin-bottom: 0; font-size: 15px">{{ cart.sizeproduct.size.name }}</p>
+                        <p style="margin-top:0; margin-bottom: 0">{% for color in cart.sizeproduct.product.color.all %} {{ color.name }} {% endfor %}</p>
+                        <p class="mt-0">{% for consist in cart.sizeproduct.product.consist.all %} {{ consist.name }} {% endfor %}</p>
+                    </div>
+                    <div class="col-4">
+                        <h5>{{cart.products_price}} Р</h5>
+                        <div class="btn-group btn-group-sm mt-2 input-group" role="group" aria-label="First group" style="max-width: 80px">
+                            <button type="button" class="btn btn-outline-secondary decrement" data-cart-id="{{ cart.id }}" data-cart-change-url="{% url 'cart:cart_change' %}" style="width: 20px">
+                                {% csrf_token %}
+                                -</button>
+                            <input type="text" class="form-control number" value="{{ cart.quantity }}" style="border-color: #4d5154; border-radius: 0; max-width: 25px; padding: 1px 8px 1px 5px;" readonly>
+                            {% if cart.quantity < cart.sizeproduct.count %}
+                            <button type="button" class="btn btn-outline-secondary increment" data-cart-id="{{ cart.id }}" data-cart-change-url="{% url 'cart:cart_change' %}" style="width: 20px">
+                                {% csrf_token %}
+                                +</button>
+                            {% else %}
+                            <button type="button" class="btn btn-outline-secondary" style="width: 20px" disabled>
+                                +</button>
+                            {% endif %}
+                        </div>
+                        <a href="{% url "cart:cart_remove" %}" class="remove-from-cart"
+                           data-cart-id="{{ cart.id }}" style="margin-top: 30px; margin-left: 5px" data-toggle="tooltip" data-placement="bottom" title="Удалить">
+                            {% csrf_token %}
+                            <img class="mx-1" src="{% static "deps/icons/trash-red.svg" %}"
+                                alt="Catalog Icon" width="20" height="20">
+                        </a>
+                    </div>
+                </div>
+            </li>
+            <hr class="mt-0 mb-1">
+        </ul>
+    {% endfor %}
+</div>
+<div class="row">
+    <h4 class="col-7 float-left"><strong>Итого</strong></h4>
+    <h4 class="col-5"><strong>{{ carts.total_price }} Р</strong></h4>
+</div>
+{% if carts and not order %}
+    <div class="row">
+        <div class="col-7"></div>
+        <div class="col-5">
+            <a class="btn mb-3 mt-2" style="background-color: #1d4d51; color: #e1d89f;" href="{% url 'orders:create_order' %}">
+                Оформить заказ
+            </a>
+        </div>
+    </div>
+{% endif %}
