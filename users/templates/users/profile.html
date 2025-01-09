@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% load static %}
+{% load carts_tags %}
+
+{% block modal_cart %}
+{% include "includes/cart_button.html" %}
+{% endblock  %}
+
+{% block css %}
+<style>
+    .nav {
+        justify-content: center;
+        border-bottom: none;
+        margin-top: -10px;
+    }
+    .nav-item {
+        margin-left: 20px;
+    }
+    .nav-link {
+        font-size: 1.25rem;
+        border: none;
+        color: #6c757d;
+        background-color: transparent;
+        width: auto;
+        padding-bottom: 5px;
+        cursor: pointer;
+    }
+    .nav-link:hover {
+        color: #1d4d51;
+        border-bottom: 2px solid #1d4d51;
+    }
+    .nav-link.active {
+        border-bottom: 2px solid #1d4d51;
+        color: #1d4d51;
+    }
+    .tab-content {
+        display: none;
+    }
+    .tab-content.active {
+        display: block;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <!-- Вкладки навигации -->
+    <ul class="nav" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-target="#profile">Профиль</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" id="orders-tab" data-target="#orders">Мои заказы</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url "user:logout" %}">Выйти</a>
+        </li>
+    </ul>
+
+    <div class="tab-content active" id="orders">
+        <div class="col-md-12">
+            <div class="bg-white p-4 mb-4 mx-2 rounded custom-shadow mt-4">
+                <h3 class="text-center mb-4">Мои заказы</h3>
+                <div class="container">
+                    <div class="accordion" id="accordionExample">
+                        {% for order in orders %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ order.id }}">
+                                <button class="accordion-button {% if order != orders.0 %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ order.id }}" aria-expanded="false" aria-controls="collapse{{ order.id }}">
+                                    Заказ № {{ order.id }} - {{ order.created_timestamp }} | Статус: <strong class="mx-2">{{order.status}}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;К оплате: <strong class="mx-2">{{order.orderitem_set.all.total_price}} P</strong>
+                                </button>
+                            </h2>
+                            <div id="collapse{{ order.id }}" class="accordion-collapse collapse {% if order == orders.0 %}show{% endif %}" aria-labelledby="heading{{ order.id }}" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    {% for item in order.orderitem_set.all %}
+                                    <div class="row">
+                                        <div class="col-1">
+                                            <img src="{{ item.sizeproduct.product.image.url }}" alt="..." height="90px" width="65px">
+                                        </div>
+                                        <div class="col-6" style="padding-left: 30px">
+                                            <h5 class="card-title mb-1">{{ item.sizeproduct.product.name }}</h5>
+                                            <p style="margin-top:0; margin-bottom: 0; font-size: 15px">Размер: {{ item.sizeproduct.size.name }}</p>
+                                            <p style="margin-top:0; margin-bottom: 0">Цвет: {% for color in item.sizeproduct.product.color.all %} {{ color.name }} {% endfor %}</p>
+                                            <p class="mt-0">Состав: {% for consist in item.sizeproduct.product.consist.all %} {{ consist.name }} {% endfor %}</p>
+                                        </div>
+                                        <div class="col-5">
+                                            <p>{{ item.price }} P&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;{{ item.quantity }}&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;{{ item.products_price }} P</p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height: 350px"></div>
+    </div>
+
+    <!-- Содержимое вкладок -->
+    <div class="tab-content-wrapper">
+        <div class="tab-content" id="profile">
+            <div class="bg-white p-4 mb-4 mx-2 rounded custom-shadow mt-4">
+                <h3 class="text-center mb-4">Профиль пользователя</h3>
+                <form action="{% url "users:profile" %}" method="post" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="id_first_name" class="form-label">Имя</label>
+                            <input type="text" class="form-control" id="id_first_name" name="first_name" placeholder="Введите ваше имя" value="{{ form.first_name.value }}">
+                            {% if form.first_name.errors %}
+                            <div style="color: red; margin-top: 5px;">{{form.first_name.errors}}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="id_last_name" class="form-label">Фамилия</label>
+                            <input type="text" class="form-control" id="id_last_name" name="last_name" placeholder="Введите вашу фамилию" value="{{ form.last_name.value }}">
+                            {% if form.last_name.errors %}
+                            <div style="color: red; margin-top: 5px;">{{form.last_name.errors}}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="id_email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="id_email" name="email" placeholder="Введите ваш email *youremail@example.com" value="{{ form.email.value }}">
+                            {% if form.email.errors %}
+                            <div style="color: red; margin-top: 5px;">{{form.email.errors}}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="id_phone_number" class="form-label">Номер телефона</label>
+                            <input type="text" class="form-control" id="id_phone_number" name="phone_number" placeholder="Введите ваш номер телефона в формате: 8XXXXXXXXXX" value="{{ form.phone_number.value }}">
+                            {% if form.phone_number.errors %}
+                            <div style="color: red; margin-top: 5px;">{{form.phone_number.errors}}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-10">
+                        </div>
+                        <div class="col-2">
+                            <button type="submit" name="profile_submit" class="btn btn-dark" style="background-color: #1d4d51; color: #e1d89f">Сохранить</button>
+                        </div>
+                    </div>
+                </form>
+                <hr>
+                <h3 class="text-center mb-4 mt-3">Изменение пароля</h3>
+                <form action="{% url "users:profile" %}" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                      <div class="col-md-12 mb-3">
+                            <label for="id_old_password" class="form-label">Старый пароль</label>
+                            <input type="password" class="form-control" id="id_old_password" name="old_password" placeholder="Введите старый пароль" value="">
+                            {% if password_form.old_password.errors %}
+                            <div style="color: red; margin-top: 5px;">{{ password_form.old_password.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="id_new_password1" class="form-label">Новый пароль</label>
+                            <input type="password" class="form-control" id="id_new_password1" name="new_password1" placeholder="Введите новый пароль" value="">
+                            {% if password_form.new_password1.errors %}
+                            <div style="color: red; margin-top: 5px;">{{ password_form.new_password1.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="id_new_password2" class="form-label">Подтверждение нового пароля</label>
+                            <input type="password" class="form-control" id="id_new_password2" name="new_password2" placeholder="Подтвердите новый пароль" value="">
+                            {% if password_form.new_password2.errors %}
+                            <div style="color: red; margin-top: 5px;">{{ password_form.new_password2.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-10">
+                        </div>
+                        <div class="col-2">
+                            <button type="submit" name="password_submit" class="btn btn-dark" style="background-color: #1d4d51; color: #e1d89f">Сохранить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabs = document.querySelectorAll('.nav-link');
+        const contents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+
+                tab.classList.add('active');
+                document.querySelector(tab.dataset.target).classList.add('active');
+            });
+        });
+    });
+</script>
+
+{% endblock %}

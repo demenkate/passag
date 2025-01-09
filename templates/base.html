@@ -1,0 +1,226 @@
+{% load static %}
+{% load goods_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static "deps/css/bootstrap/bootstrap.min.css" %}">
+    {% block css %}
+
+    {% endblock %}
+    <!-- Favicons for different platforms -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static "deps/images/passag.jpeg" %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static "deps/images/passag.jpeg" %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static "deps/images/passag.jpeg" %}">
+    <link rel="manifest" href="{% static "deps/favicon/site.webmanifest" %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css" integrity="sha512-OTcub78R3msOCtY3Tc6FzeDJ8N9qvQn1Ph49ou13xgA9VsH9+LRxoFU6EqLhW4+PKRfU+/HReXmSZXHEkpYoOA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
+
+    <title>{{ title }}</title>
+    <style>
+        .card1 {
+            background-color: #e1d89f;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .card1 button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #1d4d51;
+            color: #a18c0d;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .card1 button:hover {
+            background-color: #216268;
+        }
+        .rte {
+            background-color: #e1d89f;
+        }
+
+        .my-custom-tooltip .tooltip-inner {
+        background-color: rgba(0, 0, 0, 0.8); /* Цвет фона подсказки */
+        color: #fff; /* Цвет текста подсказки */
+        border-radius: 4px; /* Радиус скругления углов */
+        opacity: 0.9; /* Прозрачность подсказки */
+    }
+
+        body {
+            header {
+                nav {
+                    background-color: #1d4d51;
+                    div {
+                        a {
+                            img {
+                                max-height: 35px;
+                            }
+                        }
+                        div {
+                            form {
+                                input {
+                                    background-color: #a18c0d;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            footer {
+                background-color: #1d4d51;
+            }
+        }
+
+    </style>
+</head>
+
+<body class="rte">
+    <header class="fixed-top">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container d-flex" style="justify-content: normal">
+                <a class="navbar-brand" href="{% url "main:index" %}" data-toggle="tooltip" data-placement="bottom" title="На главную">
+                    <img src="/static/deps/images/passag2.jpeg">
+                </a>
+                <div class="flex-grow-1"></div>
+                    {% if user.is_admin or user.is_staff %}
+                        <a href="{% url "main:panel" %}" class="mt-1" style="margin-right: 20px;" data-toggle="tooltip" data-placement="bottom" title="Панель администратора">
+                            <img class="mx-1" src="{% static "deps/icons/setting.svg" %}"
+                                alt="Catalog Icon" width="32" height="32">
+                        </a>
+                    {% endif %}
+                    {% block modal_cart %}{% endblock  %}
+                    {% if not user.is_authenticated %}
+                        <a href="{% url "user:login" %}" type="submit" class="mt-1 " style="margin-right: 20px;" data-toggle="tooltip" data-placement="bottom" title="Авторизироваться">
+                            <img class="mx-1" src="{% static "deps/icons/profile-ohr.svg" %}"
+                                alt="Catalog Icon" width="28" height="28">
+                        </a>
+                    {% else %}
+                        <a href="{% url "user:profile" %}" type="submit" class="mt-1 " style="margin-right: 20px;" data-toggle="tooltip" data-placement="bottom" title="Профиль">
+                            <img class="mx-1" src="{% static "deps/icons/profile-ohr.svg" %}"
+                                alt="Catalog Icon" width="28" height="28">
+                        </a>
+                    {% endif %}
+                    <a href="{% url "main:about" %}" class="mt-1" style="margin-right: 20px;" data-toggle="tooltip" data-placement="bottom" title="О нас">
+                        <img class="mx-1" src="{% static "deps/icons/location-ohr.svg" %}"
+                            alt="Catalog Icon" width="28" height="28">
+                    </a>
+                    <form style="justify-self: end" class="d-flex" role="search" action="{% url "catalog:search" %}" method="get" autocomplete="off" onsubmit="return validateForm()">
+                        <input id="searchInput" class="me-2 form-control input-ohr" type="search" name="q" placeholder="Поиск" aria-label="Search" autocomplete="off" oninput="toggleButton()">
+                        <button id="searchButton" class="btn" type="submit" data-toggle="tooltip" data-placement="bottom" title="Поиск" disabled>
+                            <img class="mx-1" src="{% static "deps/icons/search-ohr.svg" %}" alt="Catalog Icon" width="28" height="28">
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <section>
+        <div class="container">
+            <!-- Каталог и корзина с фиксированным расположением на странице -->
+
+            <div class="row mt-1 card1 position-fixed" style=" position: absolute; left: 30px; top: 100px; width: 250px; border: none; overflow-x: scroll;">
+                    {% tag_categories as categories %}
+                    {% for category in categories %}
+                        <a href="{% url "catalog:index" category.slug %}" style="display: block; text-decoration: none"><button>{{category.name}}</button></a>
+                    {% endfor %}
+            </div>
+        </div>
+        <!-- Контент -->
+        <div class="container" style="flex: 1">
+            <div class="row mt-1">
+                <div class="col-lg-2">
+                    <!-- Пустой блок на Ваше усмотрение -->
+                </div>
+                <div class="col-lg-10" style="margin-top: 70px">
+                    <!-- Контент на странице -->
+                    {% include "includes/notifications.html" %}
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="py-4" style="background-color: #1d4d51; margin-top: 60px">
+        <div class="container d-flex" style="justify-content: space-between">
+            <div style="color: #a18c0d">
+                <p class="h4" style="margin-bottom: 10px; padding-left: 30px">Каталог</p>
+                <ul>
+                    {% tag_categories as categories %}
+                    {% for category in categories %}
+                        <li style="list-style-type: none"><a class="link-warning link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" style="color: #a18c0d !important;" href="{% url "catalog:index" category.slug %}">{{category.name}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div style="color: #a18c0d; margin-left: 60px">
+                <p class="h4" style="margin-bottom: 10px;">О компании</p>
+                <p style="margin-bottom: 0"><a class="link-warning link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" style="color: #a18c0d !important;" href="{% url "main:about" %}">О нас</a></p>
+            </div>
+            <div class="ms-auto" style="color: #a18c0d">
+                <p class="h4" style="margin-bottom: 10px;">Контакты</p>
+                <p style="margin-bottom: 0">Телефон: +7 (950) 700-66-48</p>
+                <p style="margin-bottom: 0">Email: passag@mail.ru</p>
+                <p style="margin-bottom: 0">Адрес: ул. Улица Октябрьской Революции, 23, город Смоленск</p>
+                <p class="h4" style="margin-bottom: 10px; margin-top: 30px;">Мы в соцсетях</p>
+                <a href="https://vk.com/passagesm">
+                    <img class="mx-1" src="{% static "deps/icons/vk-ohr.svg" %}"
+                        alt="Catalog Icon" width="28" height="28">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static "deps/js/jquery/jquery-3.7.0.min.js" %}"></script>
+    <script src="{% static "deps/js/jquery-ajax.js" %}"></script>
+    <script src="{% static "deps/js/bootstrap/bootstrap.bundle.min.js" %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $(document).ready(function(){
+          $(".owl-carousel").owlCarousel({
+                items:1,
+                loop:true,
+                margin:10,
+                autoplay:true,
+                autoplayTimeout:5000,
+                autoplayHoverPause:true
+            });
+            $('.play').on('click',function(){
+                owl.trigger('play.owl.autoplay',[1000])
+            })
+            $('.stop').on('click',function(){
+                owl.trigger('stop.owl.autoplay')
+            });
+            });
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip({
+                placement: 'bottom',
+                template: '<div class="tooltip my-custom-tooltip" role="tooltip"><div class="tooltip-inner"></div></div>'// Устанавливаем расположение tooltips снизу
+            });
+        });
+        function toggleButton() {
+            var input = document.getElementById('searchInput');
+            var button = document.getElementById('searchButton');
+            button.disabled = input.value.trim() === '';
+        }
+
+        function validateForm() {
+            var input = document.getElementById('searchInput').value.trim();
+            if (input === '') {
+                // Предотвращаем отправку формы, если поле поиска пустое
+                return false;
+            }
+            return true;
+        }
+    </script>
+
+</body>
+
+</html>

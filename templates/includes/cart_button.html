@@ -1,0 +1,39 @@
+{% load static %}
+{% load carts_tags %}
+
+{% user_carts request as carts %}
+
+<div>
+    <a type="button" id="modalButton">
+        <img class="mx-1" src="{% static "deps/icons/basket2-fill-ohr.svg" %}"
+            alt="Catalog Icon" width="28" height="28" data-toggle="tooltip" title="Корзина">
+        <span id="goods-in-cart-count" style="color: #a18c0d; margin-right: 20px;">{{ carts.total_quantity }}</span>
+    </a>
+{#    <span id="goods-in-cart-count" style="color: #a18c0d">{{ carts.total_quantity }}</span>#}
+{#    <button type="button" class="btn btn-dark btn-secondary d-flex" id="modalButton"#}
+{#        aria-expanded="false">#}
+{#        <img class="mx-1" src="{% static "deps/icons/basket2-fill-ohr.svg" %}" alt="Catalog Icon" width="24"#}
+{#            height="24">#}
+{#        <span id="goods-in-cart-count" style="color: #a18c0d">{{ carts.total_quantity }}</span>#}
+{#    </button>#}
+</div>
+<!-- Разметка модального окна корзины -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="border: none; margin-top: 10px; margin-right: 10px">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3 class="text-center mb-4" style="color: #1d4d51; margin-top: -20px">Корзина</h3>
+                <div class="container" id="cart-items-container">
+                    <!-- Разметка корзины -->
+                    {% include "carts/includes/included_cart.html" %}
+                    <!-- Закончилась разметка корзины -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

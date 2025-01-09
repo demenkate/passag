@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% load goods_tags %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "deps/css/my_footer_css.css" %}">
+{% endblock %}
+
+{% block modal_cart %}
+{% include "includes/cart_button.html" %}
+{% endblock  %}
+
+{% block content %}
+    <h1 style="color: #1d4d51;"><strong>Магазин женской одежды</strong></h1>
+    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel" style="margin-top: 40px; margin-bottom: 20px">
+      <div class="carousel-inner">
+        <div class="carousel-item active" style="margin-left: 90px">
+          <img src="/static/deps/images/Screen%20Shot%202024-05-26%20at%2018.43.36.png" class="d-block w-75" alt="...">
+        </div>
+        <div class="carousel-item" style="margin-left: 90px">
+          <img src="/static/deps/images/ZkNExs5xTBE.jpeg" class="d-block w-75" alt="...">
+        </div>
+      </div>
+      <button style="margin-left: 20px" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button style="margin-right: 115px" class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+{% endblock %}
+
+
